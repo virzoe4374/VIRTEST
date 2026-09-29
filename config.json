@@ -1,0 +1,457 @@
+{
+  "log": {
+    "loglevel": "warning",
+    "dnsLog": false
+  },
+  "dns": {
+    "servers": [
+      "https://1.1.1.1/dns-query",
+      "https://8.8.8.8/dns-query",
+      "https://8.8.4.4/dns-query"
+    ],
+    "queryStrategy": "UseIP",
+    "disableCache": false,
+    "disableFallback": true
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 10,
+        "connIdle": 300,
+        "uplinkOnly": 0,
+        "downlinkOnly": 0,
+        "bufferSize": 2048
+      },
+      "1": {
+        "handshake": 10,
+        "connIdle": 300,
+        "uplinkOnly": 0,
+        "downlinkOnly": 0,
+        "bufferSize": 4096
+      },
+      "2": {
+        "handshake": 15,
+        "connIdle": 600,
+        "uplinkOnly": 0,
+        "downlinkOnly": 0,
+        "bufferSize": 2048
+      }
+    },
+    "system": {
+      "statsInboundUplink": false,
+      "statsInboundDownlink": false,
+      "statsOutboundUplink": false,
+      "statsOutboundDownlink": false
+    }
+  },
+  "inbounds": [
+    {
+      "tag": "vless-xhttp-in",
+      "listen": "127.0.0.1",
+      "port": 18443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "24c8b9d5-4e71-4a8e-a96c-13d8a5726201",
+            "level": 0,
+            "email": "normal@cazar"
+          },
+          {
+            "id": "e7f2b1c4-9a3d-4c5e-8b6f-7123d4e5f602",
+            "level": 1,
+            "email": "ai@cazar"
+          },
+          {
+            "id": "a3c1e5b7-8d9f-4e2a-b0c4-95d8e7f1a203",
+            "level": 2,
+            "email": "forex@cazar"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "none",
+        "xhttpSettings": {
+          "path": "/bermuda-xhttp",
+          "mode": "auto",
+          "xPaddingBytes": "100-1000",
+          "scMaxEachPostBytes": 1000000,
+          "scMinPostsIntervalMs": "5-15",
+          "scMaxBufferedPosts": 100,
+          "scStreamUpServerSecs": "20-50"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "routeOnly": false
+      }
+    },
+    {
+      "tag": "vless-ws-in",
+      "listen": "127.0.0.1",
+      "port": 18444,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "24c8b9d5-4e71-4a8e-a96c-13d8a5726201",
+            "level": 0,
+            "email": "normal@cazar"
+          },
+          {
+            "id": "e7f2b1c4-9a3d-4c5e-8b6f-7123d4e5f602",
+            "level": 1,
+            "email": "ai@cazar"
+          },
+          {
+            "id": "a3c1e5b7-8d9f-4e2a-b0c4-95d8e7f1a203",
+            "level": 2,
+            "email": "forex@cazar"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/bermuda-ws"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "routeOnly": false
+      }
+    },
+    {
+      "tag": "trojan-ws-in",
+      "listen": "127.0.0.1",
+      "port": 18445,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password": "c9f4a8b7e2d14a5c9b6e8f1a2b3c4d5e",
+            "level": 0,
+            "email": "normal@cazar"
+          },
+          {
+            "password": "f1e2d3c4b5a67890123456789abcdef0",
+            "level": 1,
+            "email": "ai@cazar"
+          },
+          {
+            "password": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+            "level": 2,
+            "email": "forex@cazar"
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/bermuda-tr"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "routeOnly": false
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "direct-forex",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      },
+      "streamSettings": {
+        "sockopt": {
+          "domainStrategy": "UseIP",
+          "tcpNoDelay": true,
+          "tcpKeepAliveIdle": 45,
+          "tcpKeepAliveInterval": 10,
+          "tcpUserTimeout": 60000
+        }
+      }
+    },
+    {
+      "tag": "direct-ai",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      },
+      "streamSettings": {
+        "sockopt": {
+          "domainStrategy": "UseIP",
+          "happyEyeballs": {
+            "prioritizeIPv6": true,
+            "tryDelayMs": 250,
+            "interleave": 1,
+            "maxConcurrentTry": 2
+          },
+          "tcpMaxSeg": 1360,
+          "tcpNoDelay": true,
+          "tcpKeepAliveIdle": 60,
+          "tcpKeepAliveInterval": 15,
+          "tcpUserTimeout": 30000
+        }
+      }
+    },
+    {
+      "tag": "direct-normal",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIPv4"
+      },
+      "streamSettings": {
+        "sockopt": {
+          "domainStrategy": "UseIPv4",
+          "tcpNoDelay": true,
+          "tcpKeepAliveIdle": 60,
+          "tcpKeepAliveInterval": 15,
+          "tcpUserTimeout": 30000
+        }
+      }
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "none"
+        }
+      }
+    },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "vless-xhttp-in",
+          "vless-ws-in",
+          "trojan-ws-in"
+        ],
+        "protocol": [
+          "dns"
+        ],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "127.0.0.0/8",
+          "::1/128"
+        ],
+        "port": "18443,18444,18445",
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "network": "udp",
+        "port": "7,17,19,69,111,123,137,138,161,162,389,1900,3702,5353,5683,11211",
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "network": "tcp",
+        "port": "25,465,587",
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "geoip:private",
+          "0.0.0.0/8",
+          "10.0.0.0/8",
+          "100.64.0.0/10",
+          "127.0.0.0/8",
+          "169.254.0.0/16",
+          "172.16.0.0/12",
+          "192.0.0.0/24",
+          "192.0.2.0/24",
+          "192.168.0.0/16",
+          "198.18.0.0/15",
+          "198.51.100.0/24",
+          "203.0.113.0/24",
+          "224.0.0.0/4",
+          "240.0.0.0/4",
+          "::/128",
+          "::1/128",
+          "::ffff:0:0/96",
+          "100::/64",
+          "2001:db8::/32",
+          "2002::/16",
+          "3fff::/20",
+          "fc00::/7",
+          "fe80::/10",
+          "ff00::/8"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:yahoo.com",
+          "domain:cboe.com",
+          "domain:stlouisfed.org",
+          "domain:eia.gov",
+          "domain:gie.eu",
+          "domain:ecb.europa.eu",
+          "domain:bis.org",
+          "domain:bankofengland.co.uk",
+          "domain:mof.go.jp",
+          "domain:snb.ch",
+          "domain:bankofcanada.ca",
+          "domain:rba.gov.au",
+          "domain:nomics.world",
+          "domain:fiscaldata.treasury.gov",
+          "domain:ons.gov.uk",
+          "domain:kof.ethz.ch",
+          "domain:binance.com",
+          "domain:bybit.com",
+          "domain:dydx.trade",
+          "domain:deribit.com",
+          "domain:polymarket.com",
+          "domain:metaculus.com",
+          "domain:energy-charts.info",
+          "domain:imf.org",
+          "domain:llama.fi"
+        ],
+        "outboundTag": "direct-forex"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ai-!cn",
+          "domain:openai.com",
+          "domain:chatgpt.com",
+          "domain:chatgpt.site",
+          "domain:chat.com",
+          "domain:oaistatic.com",
+          "domain:oaistatsig.com",
+          "domain:oaiusercontent.com",
+          "domain:openaiapi-site.azureedge.net",
+          "domain:sora.com",
+          "domain:chatgpt.livekit.cloud",
+          "domain:host.livekit.cloud",
+          "domain:turn.livekit.cloud",
+          "domain:anthropic.com",
+          "domain:claude.ai",
+          "domain:claude.com",
+          "domain:claudeusercontent.com",
+          "domain:gemini.google.com",
+          "domain:gemini.google",
+          "domain:gemini.gstatic.com",
+          "domain:generativelanguage.googleapis.com",
+          "domain:geller-pa.googleapis.com",
+          "domain:proactivebackend-pa.googleapis.com",
+          "domain:robinfrontend-pa.googleapis.com",
+          "domain:aistudio.google.com",
+          "domain:ai.google.dev",
+          "domain:generativeai.google",
+          "domain:makersuite.google.com",
+          "domain:deepmind.google",
+          "domain:deepmind.com",
+          "domain:alkalicore-pa.clients6.google.com",
+          "domain:alkalimakersuite-pa.clients6.google.com",
+          "domain:webchannel-alkalimakersuite-pa.clients6.google.com",
+          "domain:cloudaicompanion.googleapis.com",
+          "domain:cloudcode-pa.googleapis.com",
+          "domain:daily-cloudcode-pa.googleapis.com",
+          "domain:notebooklm.google",
+          "domain:notebooklm.google.com",
+          "domain:notebooklm-pa.googleapis.com",
+          "domain:jules.google",
+          "domain:jules.google.com",
+          "domain:labs.google.com",
+          "domain:flow.google",
+          "domain:aisandbox-pa.googleapis.com",
+          "domain:aicode.googleapis.com",
+          "domain:aida.googleapis.com",
+          "domain:opal.google",
+          "domain:opal.google.com",
+          "domain:antigravity-pa.googleapis.com",
+          "domain:antigravity.googleapis.com",
+          "domain:antigravity.google",
+          "domain:antigravity-unleash.goog",
+          "domain:stitch.withgoogle.com",
+          "domain:deepseek.com",
+          "domain:perplexity.ai",
+          "domain:pplx.ai",
+          "domain:perplexity.com",
+          "domain:x.ai",
+          "domain:grok.com",
+          "domain:mistral.ai",
+          "domain:groq.com",
+          "domain:copilot.microsoft.com",
+          "domain:copilot.cloud.microsoft",
+          "domain:githubcopilot.com",
+          "domain:together.ai",
+          "domain:cohere.com",
+          "domain:replicate.com"
+        ],
+        "outboundTag": "direct-ai"
+      },
+      {
+        "type": "field",
+        "user": [
+          "forex@cazar"
+        ],
+        "outboundTag": "direct-forex"
+      },
+      {
+        "type": "field",
+        "user": [
+          "ai@cazar"
+        ],
+        "outboundTag": "direct-ai"
+      },
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "outboundTag": "direct-normal"
+      }
+    ]
+  }
+}
